@@ -1,0 +1,31 @@
+version: "3.9"
+services:
+  backend:
+    # depends_on:
+    #   - postgres_db
+    build:
+      context: ../../.
+      dockerfile: deployments/docker/Dockerfile
+    image: backend:v1
+    container_name: backend
+    environment:
+      - PORT=8000
+    env_file:
+      - ../../.env
+    ports:
+      - 8080:8000
+    command: sh -c "chmod +x /project/scripts/migrate.sh && sh /project/scripts/migrate.sh && /project/scripts/entrypoint.sh"
+
+#   postgres_db:
+#     image: postgres
+#     restart: always
+#     env_file:
+#       - .env
+#     ports:
+#       - 5432:5432
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data/
+
+# volumes:
+#   postgres_data:
+#     driver: local
