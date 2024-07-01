@@ -3,3 +3,4 @@ djangorestframework>=3.15.2
 environs[django]>=11.0.0
 tzdata>=2024.1
 drf-standardized-errors>=0.14.0
+django-rest-registration>=0.8.3

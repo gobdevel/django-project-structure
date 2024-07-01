@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     # 3rd Party Apps
     "drf_standardized_errors",
+    "rest_registration",
     # local Apps
 ]
 
@@ -143,3 +144,11 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# Rest registration app
+REST_REGISTRATION = {
+    'REGISTER_VERIFICATION_ENABLED': False,
+    'REGISTER_EMAIL_VERIFICATION_ENABLED': False,
+    'RESET_PASSWORD_VERIFICATION_ENABLED': False,
+}

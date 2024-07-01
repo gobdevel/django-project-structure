@@ -5,4 +5,5 @@ from django.urls import (
 
 urlpatterns = [
     path("", include("apps.core.urls")),
+    path("api/accounts/v1/", include("rest_registration.api.urls")),
 ]
