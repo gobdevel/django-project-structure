@@ -7,7 +7,6 @@ MIDDLEWARE.insert(2, "whitenoise.middleware.WhiteNoiseMiddleware")
 
 STATIC_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-
 # Config based on ENV_NAME environ variable, useful for debugging in docker
 ENV_NAME = env.str('ENV_NAME', default='production')
 if ENV_NAME == 'DEV':
