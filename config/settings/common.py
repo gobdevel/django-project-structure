@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     "drf_standardized_errors",
     "rest_registration",
     # local AppsA
+    "apps.core",
     "apps.users",
 ]
 
@@ -90,6 +91,7 @@ REST_FRAMEWORK = {
     ),
     "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
     "EXCEPTION_HANDLER": "drf_standardized_errors.handler.exception_handler",
+    "DEFAULT_PAGINATION_CLASS": "apps.core.pagination.PageNumberPaginationWithCount",
 }
 
 # Logging
