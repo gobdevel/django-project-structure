@@ -8,7 +8,7 @@ class PageNumberPaginationWithCount(PageNumberPagination):
     additional pagination details and support for sorting based on user input.
     """
 
-    page_size = 2
+    page_size = 10
     page_size_query_param = 'page_size'
 
     def paginate_queryset(self, queryset, request, view=None):
