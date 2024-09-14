@@ -19,6 +19,7 @@ class UserTests(TestCase):
             password='testpassword',
             first_name='Test',
             last_name='User',
+            is_staff=True,  # Set is_staff to True for testing
         )
         self.client.force_authenticate(user=self.user)
         self.user_list_url = reverse('user-list')
@@ -35,26 +36,36 @@ class UserTests(TestCase):
             'password': 'newpassword',
             'first_name': 'New',
             'last_name': 'User',
+            'is_staff': False,  # Set is_staff to False for the new user
         }
         response = self.client.post(self.user_list_url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(CustomUser.objects.count(), 2)
+        new_user = CustomUser.objects.get(email='newuser@example.com')
+        self.assertFalse(new_user.is_staff)  # Check if is_staff is correctly set
 
     def test_retrieve_user(self):
         response = self.client.get(self.user_detail_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['email'], self.user.email)
+        self.assertTrue(
+            response.data['is_staff']
+        )  # Check if is_staff is correctly retrieved
 
     def test_update_user(self):
         data = {
             'email': 'testuser@example.com',  # Include email to avoid validation error
             'first_name': 'Updated',
             'last_name': 'User',
+            'is_staff': False,  # Update is_staff to False
         }
         response = self.client.put(self.user_detail_url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.user.refresh_from_db()
         self.assertEqual(self.user.first_name, 'Updated')
+        self.assertFalse(
+            self.user.is_staff
+        )  # Check if is_staff is correctly updated
 
     def test_delete_user(self):
         response = self.client.delete(self.user_detail_url)
@@ -70,7 +81,10 @@ class CustomUserPaginationTests(TestCase):
             password='adminpassword',
             first_name='Admin',
             last_name='User',
+            is_staff=True,  # Set is_staff to True for the admin user
         )
+        self.user.date_joined = timezone.now()
+        self.user.save()
         self.client.force_authenticate(user=self.user)
         # Create test users
         for i in range(10):
@@ -80,6 +94,7 @@ class CustomUserPaginationTests(TestCase):
                 first_name=f'First{i}',
                 last_name=f'Last{i}',
                 date_joined=timezone.now() - timezone.timedelta(days=i + 1),
+                is_staff=False,  # Set is_staff to False for test users
             )
         self.url = reverse('user-list')  # Adjust the URL name as per your setup
         self.page_size = PageNumberPaginationWithCount.page_size
@@ -123,3 +138,15 @@ class CustomUserPaginationTests(TestCase):
         self.assertEqual(
             response.data['results'][0]['first_name'], 'Admin'
         )  # Custom ordering by 'first_name'
+
+    def test_is_staff_attribute(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        admin_user = response.data['results'][0]
+        self.assertTrue(
+            admin_user['is_staff']
+        )  # Check if is_staff is True for admin user
+        for user in response.data['results'][1:]:
+            self.assertFalse(
+                user['is_staff']
+            )  # Check if is_staff is False for other users
