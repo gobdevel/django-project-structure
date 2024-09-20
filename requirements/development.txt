@@ -1,1 +1,3 @@
 -r common.txt
+
+pur>=7.3.2
