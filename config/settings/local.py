@@ -4,7 +4,11 @@ from .common import *
 DEBUG = True
 
 if not ALLOWED_HOSTS:
-    ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+    ALLOWED_HOSTS = [
+        '127.0.0.1',
+        'localhost',
+        '192.168.0.50',
+    ]
 
 # INSTALLED_APPS += ["debug_toolbar"]
 
@@ -18,7 +22,12 @@ REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] += (
     "rest_framework.renderers.BrowsableAPIRenderer",
 )
 
-CORS_ORIGIN_WHITELIST = ["http://localhost:4200", "http://127.0.0.1:4200"]
+if not CORS_ORIGIN_WHITELIST:
+    CORS_ORIGIN_WHITELIST = [
+        "http://localhost:4200",
+        "http://127.0.0.1:4200",
+        "http://192.168.0.50:4200",
+    ]
 
 # ==============================================================================
 # EMAIL SETTINGS
