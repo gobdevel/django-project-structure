@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     # local AppsA
     "apps.core",
     "apps.users",
+    "apps.stock_watcher",
 ]
 
 MIDDLEWARE = [
