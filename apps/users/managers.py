@@ -1,3 +1,15 @@
+# -----------------------------------------------------------------------------
+# Copyright (c) 2025 Tekyonix
+# All rights reserved.
+#
+#
+# Licensed under the MIT License.
+# You may not use this file except in compliance with the License.
+# You may obtain a copy of the License at:
+# https://opensource.org/licenses/MIT
+#
+# -----------------------------------------------------------------------------
+
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
 
@@ -7,6 +19,7 @@ class CustomUserManager(BaseUserManager):
     Custom user model manager where email is the unique identifiers
     for authentication instead of usernames.
     """
+
     def create_user(self, email, password, **extra_fields):
         """
         Create and save a user with the given email and password.

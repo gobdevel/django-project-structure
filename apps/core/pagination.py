@@ -1,3 +1,15 @@
+# -----------------------------------------------------------------------------
+# Copyright (c) 2025 Tekyonix
+# All rights reserved.
+#
+#
+# Licensed under the MIT License.
+# You may not use this file except in compliance with the License.
+# You may obtain a copy of the License at:
+# https://opensource.org/licenses/MIT
+#
+# -----------------------------------------------------------------------------
+
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
@@ -15,8 +27,8 @@ class PageNumberPaginationWithCount(PageNumberPagination):
         """
         Paginate the queryset with custom sorting based on the 'ordering' query parameter.
         """
-        # Get the ordering parameter from the request, default to '-date_joined' if not provided
-        ordering = request.query_params.get('ordering', '-date_joined')
+        # Get the ordering parameter from the request, default to '-created_at' if not provided
+        ordering = request.query_params.get('ordering', 'created_at')
         # Split the ordering parameter to handle multiple fields
         ordering_fields = ordering.split(',')
         # Apply custom sorting

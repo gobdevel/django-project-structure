@@ -1,26 +1,30 @@
-from django.test import TestCase
-from rest_framework.test import APIClient
+# -----------------------------------------------------------------------------
+# Copyright (c) 2025 Tekyonix
+# All rights reserved.
+#
+#
+# Licensed under the MIT License.
+# You may not use this file except in compliance with the License.
+# You may obtain a copy of the License at:
+# https://opensource.org/licenses/MIT
+#
+# -----------------------------------------------------------------------------
+
+from rest_framework.test import APITestCase
 from rest_framework import status
 from django.urls import reverse
-from django.utils import timezone
 from django.contrib.auth import get_user_model
 from apps.core.pagination import (
     PageNumberPaginationWithCount,
 )  # Adjust the import as needed
+from apps.users.tests.factories.custom_user import CustomUserFactory
 
 CustomUser = get_user_model()
 
 
-class UserTests(TestCase):
+class UserAPITests(APITestCase):
     def setUp(self):
-        self.client = APIClient()
-        self.user = CustomUser.objects.create_user(
-            email='testuser@example.com',
-            password='testpassword',
-            first_name='Test',
-            last_name='User',
-            is_staff=True,  # Set is_staff to True for testing
-        )
+        self.user = CustomUserFactory(is_staff=True)
         self.client.force_authenticate(user=self.user)
         self.user_list_url = reverse('user-list')
         self.user_detail_url = reverse('user-detail', kwargs={'pk': self.user.pk})
@@ -73,29 +77,16 @@ class UserTests(TestCase):
         self.assertEqual(CustomUser.objects.count(), 0)
 
 
-class CustomUserPaginationTests(TestCase):
+class CustomUserPaginationTests(APITestCase):
     def setUp(self):
-        self.client = APIClient()
-        self.user = CustomUser.objects.create_user(
-            email='admin@example.com',
-            password='adminpassword',
-            first_name='Admin',
-            last_name='User',
-            is_staff=True,  # Set is_staff to True for the admin user
+        self.user = CustomUserFactory(
+            email='admin@example.com', first_name='Admin', is_staff=True
         )
-        self.user.date_joined = timezone.now()
-        self.user.save()
         self.client.force_authenticate(user=self.user)
         # Create test users
         for i in range(10):
-            CustomUser.objects.create_user(
-                email=f'user{i}@example.com',
-                password='password123',
-                first_name=f'First{i}',
-                last_name=f'Last{i}',
-                date_joined=timezone.now() - timezone.timedelta(days=i + 1),
-                is_staff=False,  # Set is_staff to False for test users
-            )
+            CustomUserFactory()
+
         self.url = reverse('user-list')  # Adjust the URL name as per your setup
         self.page_size = PageNumberPaginationWithCount.page_size
 
@@ -130,7 +121,7 @@ class CustomUserPaginationTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             response.data['results'][0]['email'], 'admin@example.com'
-        )  # Default ordering is '-date_joined'
+        )  # Default ordering is '-created_at'
 
     def test_custom_sorting(self):
         response = self.client.get(self.url, {'ordering': 'first_name'})

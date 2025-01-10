@@ -1,3 +1,15 @@
+# -----------------------------------------------------------------------------
+# Copyright (c) 2025 Tekyonix
+# All rights reserved.
+#
+#
+# Licensed under the MIT License.
+# You may not use this file except in compliance with the License.
+# You may obtain a copy of the License at:
+# https://opensource.org/licenses/MIT
+#
+# -----------------------------------------------------------------------------
+
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils import timezone
@@ -13,7 +25,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(_('last_name'), max_length=50, blank=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-    date_joined = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(default=timezone.now)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
