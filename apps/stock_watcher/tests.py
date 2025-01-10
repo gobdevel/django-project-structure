@@ -1,15 +1,16 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+
 # from .models import StockWatchA
-from apps.stock_watcher.models import StockWatch
+from apps.stock_watcher.models import WatchlistStock as StockWatch
+
 
 class StockWatchModelTest(TestCase):
 
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            email='testuser@gmail.com',
-            password='12345'
+            email='testuser@gmail.com', password='12345'
         )
         self.stock_watch = StockWatch.objects.create(
             user=self.user,
@@ -18,7 +19,7 @@ class StockWatchModelTest(TestCase):
             current_price=150.00,
             added_price=145.00,
             pe_ratio=30.00,
-            suggestion='BUY'
+            suggestion='BUY',
         )
 
     def test_stock_watch_creation(self):
@@ -41,7 +42,7 @@ class StockWatchModelTest(TestCase):
             current_price=100.00,
             added_price=95.00,
             pe_ratio=20.00,
-            suggestion='BUY'
+            suggestion='BUY',
         )
         self.assertEqual(stock_watch.stock_symbol, 'A' * 10)
 
@@ -54,7 +55,7 @@ class StockWatchModelTest(TestCase):
                 current_price=100.00,
                 added_price=95.00,
                 pe_ratio=20.00,
-                suggestion='BUY'
+                suggestion='BUY',
             )
             stock_watch.full_clean()
 
@@ -67,7 +68,7 @@ class StockWatchModelTest(TestCase):
                 current_price=150.00,
                 added_price=145.00,
                 pe_ratio=30.00,
-                suggestion='HOLD'
+                suggestion='HOLD',
             )
             stock_watch.full_clean()
 
@@ -80,7 +81,7 @@ class StockWatchModelTest(TestCase):
                 current_price=-150.00,
                 added_price=145.00,
                 pe_ratio=30.00,
-                suggestion='BUY'
+                suggestion='BUY',
             )
             stock_watch.full_clean()
 
@@ -93,6 +94,6 @@ class StockWatchModelTest(TestCase):
                 current_price=150.00,
                 added_price=-145.00,
                 pe_ratio=30.00,
-                suggestion='BUY'
+                suggestion='BUY',
             )
             stock_watch.full_clean()

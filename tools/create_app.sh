@@ -26,10 +26,13 @@ fi
 
 # create app directory
 mkdir -p apps/$app_name/api/v1
+mkdir -p apps/$app_name/tests/facttories
 
 # create app files
-touch apps/$app_name/{__init__.py,admin.py,apps.py,models.py,tests.py}
+touch apps/$app_name/{__init__.py,admin.py,apps.py,models.py,tests}
 touch apps/$app_name/api/__init__.py
 touch apps/$app_name/api/v1/{__init__.py,serializers.py,tests.py,urls.py,views.py}
+touch apps/$app_name/tests/__init__.py
+touch apps/$app_name/tests/factories/__init__.py
 
 echo "App $app_name created successfully!"

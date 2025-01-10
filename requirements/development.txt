@@ -1,3 +1,5 @@
 -r common.txt
 
 pur>=7.3.2
+factory_boy>=3.3.1
+Faker>=33.3.0
