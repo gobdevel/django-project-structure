@@ -1,5 +1,8 @@
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 from apps.stock_watcher.models import Watchlist, WatchlistStock
+from apps.users.api.v1.serializers import UserSerializer
+from apps.users.models import CustomUser
 
 
 class WatchlistStockSerializer(serializers.ModelSerializer):
@@ -7,7 +10,6 @@ class WatchlistStockSerializer(serializers.ModelSerializer):
         model = WatchlistStock
         fields = [
             'id',
-            'watchlist',
             'symbol',
             'name',
             'current_price',
@@ -19,7 +21,6 @@ class WatchlistStockSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = [
             'id',
-            'watchlist',
             'created_at',
             'updated_at',
             'current_price',
@@ -27,15 +28,20 @@ class WatchlistStockSerializer(serializers.ModelSerializer):
             'suggestion',
         ]
 
-    def create(self, validated_data):
-        request_object = self.context['request']
+    def validate(self, data):
         watchlist_id = self.context['watchlist_id']
-        if watchlist_id is None:
-            raise serializers.ValidationError('watchlist is none')
-        watchlist = Watchlist.objects.get(id=watchlist_id)
-        if watchlist.user != request_object.user:
+        # Ensure watchlist exists
+        try:
+            watchlist = Watchlist.objects.get(id=watchlist_id)
+            data['watchlist'] = watchlist
+        except Watchlist.DoesNotExist:
             raise serializers.ValidationError('Invalid watchlist')
-        validated_data['watchlist'] = watchlist
+
+        if watchlist.user != self.context['request'].user:
+            raise serializers.ValidationError('Invalid watchlist')
+        return data
+
+    def create(self, validated_data):
         validated_data['current_price'] = 0
         validated_data['pe_ratio'] = 0
         validated_data['suggestion'] = 0
@@ -55,23 +61,32 @@ class WatchlistSerializer(serializers.ModelSerializer):
     class Meta:
         model = Watchlist
         fields = ['id', 'name', 'currency', 'created_at', 'stocks']
-        read_only_fields = ['id', 'created_at']
+        read_only_fields = ['id', 'created_at', 'stocks']
 
     def create(self, validated_data):
         validated_data['user'] = self.context['request'].user
-        watchlist = Watchlist.objects.create(**validated_data)
+        try:
+            watchlist = Watchlist.objects.create(**validated_data)
+        except Exception as e:
+            raise serializers.ValidationError(e)
+
         return watchlist
+
+    def update(self, instance, validated_data):
+        if instance.user != self.context['request'].user:
+            raise serializers.ValidationError('Invalid watchlist')
+        return super().update(instance, validated_data)
 
 
 class WatchlistDetailSerializer(serializers.ModelSerializer):
-    stocks = WatchlistStockSerializer(many=True)
+    stocks = WatchlistStockSerializer(many=True, read_only=True)
 
     class Meta:
         model = Watchlist
         fields = ['id', 'name', 'currency', 'created_at', 'stocks']
         read_only_fields = ['id', 'created_at']
 
-    def create(self, validated_data):
-        validated_data['user'] = self.context['request'].user
-        watchlist = Watchlist.objects.create(**validated_data)
-        return watchlist
+    def update(self, instance, validated_data):
+        if instance.user != self.context['request'].user:
+            raise serializers.ValidationError('Invalid watchlist')
+        return super().update(instance, validated_data)

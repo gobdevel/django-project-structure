@@ -3,6 +3,7 @@
 from enum import IntEnum
 from pickle import NONE
 
+
 class Currency(IntEnum):
     USD = 1
     INR = 2
@@ -10,6 +11,7 @@ class Currency(IntEnum):
     @classmethod
     def choices(cls):
         return [(key.value, key.name) for key in cls]
+
 
 class Suggestions(IntEnum):
     NONE = 0
@@ -20,3 +22,7 @@ class Suggestions(IntEnum):
     @classmethod
     def choices(cls):
         return [(key.value, key.name) for key in cls]
+
+    @classmethod
+    def values(cls):
+        return [key.value for key in cls]
