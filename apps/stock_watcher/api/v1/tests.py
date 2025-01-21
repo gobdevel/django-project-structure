@@ -46,7 +46,6 @@ class WatchlistGetAPITest(WatchlistBaseAPITest):
                 'name': reference.name,
                 'currency': reference.currency,
                 'created_at': reference.created_at.strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
-                'stocks': [],
             },
         )
 
@@ -72,9 +71,6 @@ class WatchlistGetAPITest(WatchlistBaseAPITest):
                 'name': reference.name,
                 'currency': reference.currency,
                 'created_at': reference.created_at.strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
-                'stocks': [
-                    1,
-                ],
             },
         )
 
@@ -95,10 +91,6 @@ class WatchlistGetAPITest(WatchlistBaseAPITest):
                 'name': reference.name,
                 'currency': reference.currency,
                 'created_at': reference.created_at.strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
-                'stocks': [
-                    1,
-                    2,
-                ],
             },
         )
 
@@ -117,7 +109,6 @@ class WatchlistGetAPITest(WatchlistBaseAPITest):
                 'name': reference.name,
                 'currency': reference.currency,
                 'created_at': reference.created_at.strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
-                'stocks': [],
             },
         )
 
@@ -147,9 +138,6 @@ class WatchlistGetAPITest(WatchlistBaseAPITest):
                 'name': reference.name,
                 'currency': reference.currency,
                 'created_at': reference.created_at.strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
-                'stocks': [
-                    1,
-                ],
             },
         )
 
@@ -169,23 +157,6 @@ class WatchlistDetailAPITest(WatchlistBaseAPITest):
                 'name': watchlist.name,
                 'currency': watchlist.currency,
                 'created_at': watchlist.created_at.strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
-                'stocks': [
-                    {
-                        'id': stock.id,
-                        'symbol': stock.symbol,
-                        'name': stock.name,
-                        'current_price': str(stock.current_price),
-                        'added_price': str(stock.added_price),
-                        'pe_ratio': str(stock.pe_ratio),
-                        'suggestion': stock.suggestion,
-                        'created_at': stock.created_at.strftime(
-                            '%Y-%m-%dT%H:%M:%S.%fZ'
-                        ),
-                        'updated_at': stock.updated_at.strftime(
-                            '%Y-%m-%dT%H:%M:%S.%fZ'
-                        ),
-                    }
-                ],
             },
         )
 
@@ -204,38 +175,6 @@ class WatchlistDetailAPITest(WatchlistBaseAPITest):
                 'name': watchlist.name,
                 'currency': watchlist.currency,
                 'created_at': watchlist.created_at.strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
-                'stocks': [
-                    {
-                        'id': stock1.id,
-                        'symbol': stock1.symbol,
-                        'name': stock1.name,
-                        'current_price': str(stock1.current_price),
-                        'added_price': str(stock1.added_price),
-                        'pe_ratio': str(stock1.pe_ratio),
-                        'suggestion': stock1.suggestion,
-                        'created_at': stock1.created_at.strftime(
-                            '%Y-%m-%dT%H:%M:%S.%fZ'
-                        ),
-                        'updated_at': stock1.updated_at.strftime(
-                            '%Y-%m-%dT%H:%M:%S.%fZ'
-                        ),
-                    },
-                    {
-                        'id': stock2.id,
-                        'symbol': stock2.symbol,
-                        'name': stock2.name,
-                        'current_price': str(stock2.current_price),
-                        'added_price': str(stock2.added_price),
-                        'pe_ratio': str(stock2.pe_ratio),
-                        'suggestion': stock2.suggestion,
-                        'created_at': stock2.created_at.strftime(
-                            '%Y-%m-%dT%H:%M:%S.%fZ'
-                        ),
-                        'updated_at': stock2.updated_at.strftime(
-                            '%Y-%m-%dT%H:%M:%S.%fZ'
-                        ),
-                    },
-                ],
             },
         )
 
@@ -255,7 +194,6 @@ class WatchlistDetailAPITest(WatchlistBaseAPITest):
                 'name': reference.name,
                 'currency': reference.currency,
                 'created_at': reference.created_at.strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
-                'stocks': [],
             },
         )
 
@@ -283,38 +221,6 @@ class WatchlistDetailAPITest(WatchlistBaseAPITest):
                 'name': reference.name,
                 'currency': reference.currency,
                 'created_at': reference.created_at.strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
-                'stocks': [
-                    {
-                        'id': stock1.id,
-                        'symbol': stock1.symbol,
-                        'name': stock1.name,
-                        'current_price': str(stock1.current_price),
-                        'added_price': str(stock1.added_price),
-                        'pe_ratio': str(stock1.pe_ratio),
-                        'suggestion': stock1.suggestion,
-                        'created_at': stock1.created_at.strftime(
-                            '%Y-%m-%dT%H:%M:%S.%fZ'
-                        ),
-                        'updated_at': stock1.updated_at.strftime(
-                            '%Y-%m-%dT%H:%M:%S.%fZ'
-                        ),
-                    },
-                    {
-                        'id': stock2.id,
-                        'symbol': stock2.symbol,
-                        'name': stock2.name,
-                        'current_price': str(stock2.current_price),
-                        'added_price': str(stock2.added_price),
-                        'pe_ratio': str(stock2.pe_ratio),
-                        'suggestion': stock2.suggestion,
-                        'created_at': stock2.created_at.strftime(
-                            '%Y-%m-%dT%H:%M:%S.%fZ'
-                        ),
-                        'updated_at': stock2.updated_at.strftime(
-                            '%Y-%m-%dT%H:%M:%S.%fZ'
-                        ),
-                    },
-                ],
             },
         )
 
@@ -333,7 +239,6 @@ class WatchlistCreateAPITest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['name'], 'Test Watchlist')
         self.assertEqual(response.data['currency'], 1)
-        self.assertEqual(response.data['stocks'], [])
 
     def test_create_watchlist_with_invalid_currency(self):
         data = {
@@ -445,22 +350,6 @@ class WatchlistUpdateAPITest(WatchlistBaseAPITest):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['currency'], 2)
-        self.assertEqual(
-            response.data['stocks'],
-            [
-                {
-                    'id': stock.id,
-                    'symbol': stock.symbol,
-                    'name': stock.name,
-                    'current_price': str(stock.current_price),
-                    'added_price': str(stock.added_price),
-                    'pe_ratio': str(stock.pe_ratio),
-                    'suggestion': stock.suggestion,
-                    'created_at': stock.created_at.strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
-                    'updated_at': stock.updated_at.strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
-                }
-            ],
-        )
 
 
 class WatchlistDeleteAPITest(WatchlistBaseAPITest):

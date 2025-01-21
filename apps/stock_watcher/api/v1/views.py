@@ -4,7 +4,6 @@ from apps.stock_watcher.models import Watchlist, WatchlistStock
 from .serializers import (
     WatchlistSerializer,
     WatchlistStockSerializer,
-    WatchlistDetailSerializer,
 )
 
 
@@ -27,7 +26,7 @@ class WatchlistView(generics.ListCreateAPIView):
 
 
 class WatchlistDetailView(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = WatchlistDetailSerializer
+    serializer_class = WatchlistSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
@@ -35,7 +34,13 @@ class WatchlistDetailView(generics.RetrieveUpdateDestroyAPIView):
         This view should return a list of all the purchases
         for the currently authenticated user.
         """
-        return Watchlist.objects.filter()
+        return Watchlist.objects.filter(id=self.kwargs.get('pk'))
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        # Get URL parameter and add it to context
+        context['user'] = self.request.user
+        return context
 
 
 class WatchlistStockView(generics.ListCreateAPIView):

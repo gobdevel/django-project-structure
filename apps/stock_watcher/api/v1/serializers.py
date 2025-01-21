@@ -56,12 +56,10 @@ class WatchlistStockSerializer(serializers.ModelSerializer):
 
 
 class WatchlistSerializer(serializers.ModelSerializer):
-    stocks = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-
     class Meta:
         model = Watchlist
-        fields = ['id', 'name', 'currency', 'created_at', 'stocks']
-        read_only_fields = ['id', 'created_at', 'stocks']
+        fields = ['id', 'name', 'currency', 'created_at']
+        read_only_fields = ['id', 'created_at']
 
     def create(self, validated_data):
         validated_data['user'] = self.context['request'].user
@@ -71,20 +69,6 @@ class WatchlistSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(e)
 
         return watchlist
-
-    def update(self, instance, validated_data):
-        if instance.user != self.context['request'].user:
-            raise serializers.ValidationError('Invalid watchlist')
-        return super().update(instance, validated_data)
-
-
-class WatchlistDetailSerializer(serializers.ModelSerializer):
-    stocks = WatchlistStockSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Watchlist
-        fields = ['id', 'name', 'currency', 'created_at', 'stocks']
-        read_only_fields = ['id', 'created_at']
 
     def update(self, instance, validated_data):
         if instance.user != self.context['request'].user:

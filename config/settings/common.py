@@ -31,7 +31,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "drf_standardized_errors",
     "rest_registration",
-    # local AppsA
+    # local Apps
     "apps.core",
     "apps.users",
     "apps.stock_watcher",
